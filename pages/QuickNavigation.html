@@ -194,6 +194,7 @@
             width: 38px;
             height: 38px;
             background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.25);
             border-radius: var(--radius);
             color: white;
@@ -206,7 +207,6 @@
         }
 
         .header-tool-btn:hover {
-            background: rgba(255,255,255,0.25);
             transform: scale(1.05);
         }
 
@@ -265,6 +265,15 @@
             transform: translateY(0);
         }
 
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary:disabled:hover {
+            transform: none;
+        }
+
         /* ===== 更多按钮和下拉菜单 ===== */
         .btn-more {
             padding: 0.625rem 1rem;
@@ -272,6 +281,15 @@
             border-radius: var(--radius);
             font-size: 0.9rem;
             background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
             color: white;
             cursor: pointer;
             transition: var(--transition);
@@ -750,8 +768,8 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(15,23,42,0.6);
-            backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -764,7 +782,7 @@
             background: var(--surface);
             border-radius: var(--radius-xl);
             padding: 1.5rem;
-            max-width: 500px;
+            max-width: 400px;
             width: 100%;
             box-shadow: var(--shadow-lg);
             animation: scaleIn 0.3s ease-out;
