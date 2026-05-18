@@ -22,14 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.14/vue.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
-  <script>
-    // 确保 Vue 加载成功
-    if (typeof Vue === 'undefined') {
-      document.write('<script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"><\/script>');
-    }
-  </script>
+  <script src="../viewport/js/vue.js"></script>
   <script src="../viewport/js/xlsx.full.min.js"></script>
   <script src="../viewport/js/purify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -2056,6 +2049,14 @@
         isMarkdown: false
       }
     ];
+
+    // 检查 Vue 是否加载
+    if (typeof Vue === 'undefined') {
+      console.error('Vue 未加载!');
+      document.getElementById('app').innerHTML = '<div style="padding:2rem;text-align:center;color:red;">Vue 未加载，请刷新页面</div>';
+    } else {
+      console.log('Vue 已加载:', Vue.version);
+    }
 
     new Vue({
       el: '#app',
