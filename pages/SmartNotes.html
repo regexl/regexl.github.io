@@ -686,36 +686,51 @@
     }
 
     /* ===== 编辑器弹窗 ===== */
+    /* ===== 编辑器 ===== */
     .editor-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      background: var(--bg);
       z-index: 1000;
       animation: fadeIn 0.2s ease-out;
+      overflow: auto;
     }
 
-    .editor-modal {
+    .editor-fullscreen {
+      position: fixed;
+      inset: 0;
       background: var(--surface);
-      border-radius: var(--radius-xl);
-      width: 100%;
-      max-width: 680px;
-      max-height: 90vh;
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      animation: scaleIn 0.3s ease-out;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
 
     .editor-header {
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.5rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .editor-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .editor-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .editor-title-input {
@@ -728,6 +743,7 @@
       padding: 0.5rem;
       border-radius: var(--radius-sm);
       transition: var(--transition);
+      min-width: 300px;
     }
 
     .editor-title-input:focus {
@@ -754,15 +770,47 @@
     }
 
     .editor-close:hover {
-      background: #fee2e2;
-      color: #dc2626;
+      background: var(--danger);
+      color: white;
+    }
+
+    .editor-expand {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--surface-hover);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .editor-expand:hover {
+      background: var(--primary);
+      color: white;
     }
 
     .editor-body {
-      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     /* 格式工具栏 */
+    .format-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
     .format-toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -804,19 +852,32 @@
       margin: 0 0.35rem;
     }
 
+    /* 编辑器内容区域 */
+    .editor-content-area {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      margin-bottom: 1rem;
+    }
+
+    .editor-content-area .rich-text-editor,
+    .editor-content-area .markdown-editor,
+    .editor-content-area .markdown-preview {
+      flex: 1;
+    }
+
     /* 富文本编辑器 */
     .rich-text-editor {
-      min-height: 200px;
       border: 2px solid var(--border);
       border-radius: var(--radius);
-      padding: 1rem;
+      padding: 1.5rem;
       background: var(--bg);
       color: var(--text);
-      font-size: 0.95rem;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 1.8;
       transition: var(--transition);
       overflow-y: auto;
-      max-height: 300px;
+      flex: 1;
     }
 
     .rich-text-editor:focus {
@@ -833,19 +894,18 @@
 
     /* Markdown 编辑器 */
     .markdown-editor {
-      min-height: 200px;
+      flex: 1;
       width: 100%;
       border: 2px solid var(--border);
       border-radius: var(--radius);
-      padding: 1rem;
+      padding: 1.5rem;
       background: var(--bg);
       color: var(--text);
-      font-size: 0.95rem;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 1.8;
       font-family: 'Consolas', 'Monaco', monospace;
       transition: var(--transition);
-      resize: vertical;
-      overflow-y: auto;
+      resize: none;
     }
 
     .markdown-editor:focus {
@@ -860,16 +920,15 @@
 
     /* Markdown 预览（适配 marked.js） */
     .markdown-preview {
-      min-height: 200px;
-      max-height: 300px;
+      flex: 1;
       overflow-y: auto;
       border: 2px solid var(--border);
       border-radius: var(--radius);
-      padding: 1rem;
+      padding: 1.5rem;
       background: var(--bg);
       color: var(--text);
-      font-size: 0.95rem;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 1.8;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -980,7 +1039,8 @@
 
     /* 标签输入 */
     .tag-input-group {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+      flex-shrink: 0;
     }
 
     .tag-input-label {
@@ -1549,9 +1609,12 @@
       </div>
 
       <!-- 便签编辑器弹窗 -->
-      <div class="editor-overlay" v-if="showNoteEditor" @click.self="cancelEdit">
-        <div class="editor-modal">
-          <div class="editor-header">
+      <div class="editor-fullscreen" v-if="showNoteEditor">
+        <div class="editor-header">
+          <div class="editor-header-left">
+            <button class="editor-close" @click="cancelEdit" title="取消 (Esc)">
+              <i class="fas fa-arrow-left"></i>
+            </button>
             <input
               type="text"
               class="editor-title-input"
@@ -1559,55 +1622,60 @@
               v-model="currentNote.title"
               @keydown.enter="saveNote"
             >
-            <button class="editor-close" @click="cancelEdit">
+          </div>
+          <div class="editor-header-right">
+            <button class="editor-close" @click="cancelEdit" title="关闭">
               <i class="fas fa-times"></i>
             </button>
           </div>
-          <div class="editor-body">
-            <!-- 格式工具栏 -->
-            <div class="format-toolbar">
-              <button class="format-btn" @click="formatText('bold')" title="加粗 (Ctrl+B)">
-                <i class="fas fa-bold"></i>
-              </button>
-              <button class="format-btn" @click="formatText('italic')" title="斜体 (Ctrl+I)">
-                <i class="fas fa-italic"></i>
-              </button>
-              <button class="format-btn" @click="formatText('underline')" title="下划线">
-                <i class="fas fa-underline"></i>
-              </button>
-              <div class="format-divider"></div>
-              <button class="format-btn" @click="formatText('insertUnorderedList')" title="无序列表">
-                <i class="fas fa-list-ul"></i>
-              </button>
-              <button class="format-btn" @click="formatText('insertOrderedList')" title="有序列表">
-                <i class="fas fa-list-ol"></i>
-              </button>
-              <div class="format-divider"></div>
-              <button class="format-btn" @click="insertLink" title="插入链接">
-                <i class="fas fa-link"></i>
-              </button>
+        </div>
+        <div class="editor-body">
+          <!-- 格式工具栏 -->
+          <div class="format-toolbar">
+            <button class="format-btn" @click="formatText('bold')" title="加粗 (Ctrl+B)">
+              <i class="fas fa-bold"></i>
+            </button>
+            <button class="format-btn" @click="formatText('italic')" title="斜体 (Ctrl+I)">
+              <i class="fas fa-italic"></i>
+            </button>
+            <button class="format-btn" @click="formatText('underline')" title="下划线">
+              <i class="fas fa-underline"></i>
+            </button>
+            <div class="format-divider"></div>
+            <button class="format-btn" @click="formatText('insertUnorderedList')" title="无序列表">
+              <i class="fas fa-list-ul"></i>
+            </button>
+            <button class="format-btn" @click="formatText('insertOrderedList')" title="有序列表">
+              <i class="fas fa-list-ol"></i>
+            </button>
+            <div class="format-divider"></div>
+            <button class="format-btn" @click="insertLink" title="插入链接">
+              <i class="fas fa-link"></i>
+            </button>
+            <div class="format-divider"></div>
+            <button
+              class="format-btn"
+              :class="{ active: editorMode === 'markdown' }"
+              @click="toggleEditorMode"
+              title="切换 Markdown 模式"
+            >
+              <i class="fab fa-markdown"></i>
+            </button>
+            <template v-if="editorMode === 'markdown'">
               <div class="format-divider"></div>
               <button
                 class="format-btn"
-                :class="{ active: editorMode === 'markdown' }"
-                @click="toggleEditorMode"
-                title="切换 Markdown 模式"
+                :class="{ active: showMarkdownPreview }"
+                @click="showMarkdownPreview = !showMarkdownPreview"
+                title="预览"
               >
-                <i class="fab fa-markdown"></i>
+                <i class="fas fa-eye"></i>
               </button>
-              <template v-if="editorMode === 'markdown'">
-                <div class="format-divider"></div>
-                <button
-                  class="format-btn"
-                  :class="{ active: showMarkdownPreview }"
-                  @click="showMarkdownPreview = !showMarkdownPreview"
-                  title="预览"
-                >
-                  <i class="fas fa-eye"></i>
-                </button>
-              </template>
-            </div>
+            </template>
+          </div>
 
+          <!-- 编辑器内容区域 -->
+          <div class="editor-content-area">
             <!-- 富文本编辑器 -->
             <textarea
               v-if="editorMode === 'markdown' && !showMarkdownPreview"
@@ -1629,9 +1697,36 @@
               @keydown.ctrl.enter="saveNote"
               data-placeholder="开始输入内容..."
             ></div>
+          </div>
 
-            <!-- 标签输入 -->
-            <div class="tag-input-group">
+          <!-- 标签输入 -->
+          <div class="tag-input-group">
+            <label class="tag-input-label">
+              <i class="fas fa-tags me-1"></i>标签
+            </label>
+            <input
+              type="text"
+              class="tag-input"
+              placeholder="添加标签，用逗号分隔"
+              v-model="currentNote.tags"
+            >
+          </div>
+        </div>
+        <div class="editor-footer">
+          <div class="editor-hint">
+            <kbd>Ctrl</kbd> + <kbd>Enter</kbd> 保存
+            <span class="mx-2">·</span>
+            <kbd>Esc</kbd> 取消
+          </div>
+          <div class="editor-actions">
+            <button class="btn-cancel" @click="cancelEdit">取消</button>
+            <button class="btn-save" @click="saveNote">
+              <i class="fas fa-check"></i>
+              保存便签
+            </button>
+          </div>
+        </div>
+      </div>
               <label class="tag-input-label">
                 <i class="fas fa-tags me-1"></i>标签
               </label>
