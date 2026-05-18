@@ -22,8 +22,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="../viewport/js/app-utils.js"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.14/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+  <script>
+    // 确保 Vue 加载成功
+    if (typeof Vue === 'undefined') {
+      document.write('<script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"><\/script>');
+    }
+  </script>
   <script src="../viewport/js/xlsx.full.min.js"></script>
   <script src="../viewport/js/purify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
