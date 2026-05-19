@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>更多工具 - Ethan 工具库</title>
+  <link rel="canonical" href="https://232310.xyz/pages/">
+  <meta name="robots" content="index,follow">
+  <link href="../viewport/assets/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tool-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px -5px rgba(99,102,241,0.2);
+      border-color: var(--primary-light);
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      color: var(--text);
+    }
+
+    .tool-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="https://232310.xyz/" class="back-link">
+      <i class="fas fa-arrow-left"></i> 返回首页
+    </a>
+
+    <div class="page-header">
+      <h1 class="page-title">更多工具</h1>
+      <p class="page-subtitle">实用的在线工具集合</p>
+    </div>
+
+    <div class="tools-grid">
+      <a href="SmartNotes.html" class="tool-card">
+        <div class="tool-icon"><i class="far fa-sticky-note"></i></div>
+        <h3 class="tool-name">智能便签</h3>
+        <p class="tool-desc">支持富文本编辑、标签筛选和多格式导入导出的现代便签工具</p>
+      </a>
+
+      <a href="ConvenientNotebook.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-book"></i></div>
+        <h3 class="tool-name">便捷笔记本</h3>
+        <p class="tool-desc">简单的在线笔记工具</p>
+      </a>
+
+      <a href="QuickNavigation.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-compass"></i></div>
+        <h3 class="tool-name">快速导航</h3>
+        <p class="tool-desc">快速访问常用网站和资源</p>
+      </a>
+
+      <a href="InvestmentDashboard.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-chart-line"></i></div>
+        <h3 class="tool-name">投资仪表盘</h3>
+        <p class="tool-desc">投资组合管理和分析工具</p>
+      </a>
+
+      <a href="QuotePilot.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-plane-departure"></i></div>
+        <h3 class="tool-name">Quote Pilot</h3>
+        <p class="tool-desc">报价工具</p>
+      </a>
+
+      <a href="CommercialHousingInformationManagementSystem.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-building"></i></div>
+        <h3 class="tool-name">商业地产信息管理系统</h3>
+        <p class="tool-desc">商业地产信息管理</p>
+      </a>
+
+      <a href="FullFeaturedOnlineWhiteboard.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-chalkboard"></i></div>
+        <h3 class="tool-name">在线白板</h3>
+        <p class="tool-desc">功能完整的在线白板工具</p>
+      </a>
+
+      <a href="MobileCreditUsageCycleCalculator.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-mobile-alt"></i></div>
+        <h3 class="tool-name">手机信用使用周期计算器</h3>
+        <p class="tool-desc">计算手机信用额度使用周期</p>
+      </a>
+
+      <a href="TripValidator.html" class="tool-card">
+        <div class="tool-icon"><i class="fas fa-check-circle"></i></div>
+        <h3 class="tool-name">行程验证器</h3>
+        <p class="tool-desc">验证行程信息</p>
+      </a>
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="../viewport/assets/fontawesome-free-6.4.2-web/css/all.min.css">
+</body>
+</html>
