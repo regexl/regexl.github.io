@@ -1727,33 +1727,6 @@
           </div>
         </div>
       </div>
-              <label class="tag-input-label">
-                <i class="fas fa-tags me-1"></i>标签
-              </label>
-              <input
-                type="text"
-                class="tag-input"
-                placeholder="添加标签，用逗号分隔"
-                v-model="currentNote.tags"
-              >
-            </div>
-          </div>
-          <div class="editor-footer">
-            <div class="editor-hint">
-              <kbd>Ctrl</kbd> + <kbd>Enter</kbd> 保存
-              <span class="mx-2">·</span>
-              <kbd>Esc</kbd> 取消
-            </div>
-            <div class="editor-actions">
-              <button class="btn-cancel" @click="cancelEdit">取消</button>
-              <button class="btn-save" @click="saveNote">
-                <i class="fas fa-check"></i>
-                保存便签
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- 便签列表 -->
       <div class="row g-4" v-if="filteredNotes.length > 0">
