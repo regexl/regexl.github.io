@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>朋友圈静悄悄，往往不是没人在看</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background-color: #f4f4f4; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.8; color: #333; }
+  .article-wrap { max-width: 640px; margin: 24px auto 60px; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .cover { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+  .cover img { width: 100%; height: 100%; object-fit: cover; }
+  .cover-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .cover-title { color: #fff; font-size: 26px; font-weight: 700; line-height: 1.4; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+  .cover-sub { color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 12px; }
+  .article-meta { padding: 16px 20px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #999; }
+  .article-meta span { margin-right: 16px; }
+  .article-body { padding: 24px 24px 32px; font-size: 16px; }
+  .article-body p { margin-bottom: 20px; color: #2a2a2a; }
+  .article-body p.lead { font-size: 17px; color: #1a1a1a; font-weight: 500; }
+  .article-body h2 { font-size: 18px; font-weight: 600; color: #111; margin: 28px 0 12px; padding-left: 12px; border-left: 4px solid #07c160; }
+  .article-body h2.cn { font-size: 20px; margin-top: 36px; }
+  .article-body blockquote { border-left: 4px solid #ddd; padding: 4px 16px; margin: 20px 0; color: #555; font-style: italic; background: #fafafa; }
+  .article-body hr { border: none; border-top: 1px dashed #e0e0e0; margin: 28px 0; }
+  .img-block { margin: 24px 0; text-align: center; }
+  .img-block img { max-width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
+  .img-block .img-desc { font-size: 12px; color: #aaa; margin-top: 6px; }
+  .highlight-box { background: #f9fdf9; border: 1px solid #d4efdf; border-radius: 10px; padding: 16px 20px; margin: 24px 0; }
+  .highlight-box strong { color: #07c160; }
+  .article-end { margin-top: 36px; padding-top: 20px; border-top: 1px solid #f0f0f0; font-size: 13px; color: #aaa; text-align: center; }
+  .tag { display: inline-block; background: #e8f5e9; color: #07c160; font-size: 12px; padding: 2px 8px; border-radius: 4px; margin-bottom: 16px; }
+  .wechat-hr { text-align: center; margin: 32px 0; color: #ccc; font-size: 20px; letter-spacing: 8px; }
+
+  /* 锁屏界面 */
+  .lock-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+  .lock-container { background: #fff; border-radius: 16px; padding: 40px 36px; max-width: 360px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .lock-container h2 { font-size: 22px; margin-bottom: 12px; }
+  .lock-container p { color: #888; font-size: 14px; margin-bottom: 24px; }
+  .lock-container input { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; margin-bottom: 12px; }
+  .lock-container input:focus { border-color: #07c160; }
+  .lock-container button { width: 100%; padding: 12px; background: #07c160; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+  .lock-container button:hover { background: #06a351; }
+  .lock-container .error { color: #e53935; font-size: 13px; margin-top: 8px; }
+  .lock-icon { font-size: 48px; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<!-- 锁屏界面 -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-container">
+    <div class="lock-icon">🔒</div>
+    <h2>此文章受保护</h2>
+    <p>输入秘钥以继续阅读</p>
+    <input type="password" id="keyInput" placeholder="输入秘钥" onkeydown="if(event.key==='Enter')checkKey()">
+    <button onclick="checkKey()">解锁</button>
+    <p id="error" class="error"></p>
+  </div>
+</div>
+
+<!-- 文章内容（默认隐藏） -->
+<div class="article-wrap" id="article" style="display:none">
+  <div class="cover">
+    <img src="article-images/cover.jpg" alt="封面" onerror="this.style.display='none'" />
+    <div class="cover-overlay">
+      <div class="cover-title">朋友圈静悄悄，<br>往往不是没人在看</div>
+      <div class="cover-sub">凌晨两点，你发了一条朋友圈。等了十分钟，只有两个赞。一个是你妈。</div>
+    </div>
+  </div>
+
+  <div class="article-meta">
+    <span>👤 小鱼运营笔记</span>
+    <span>📅 2026-05-25</span>
+    <span>🔖 社交心理</span>
+  </div>
+
+  <div class="article-body">
+    <p class="lead">凌晨两点，你发了一条朋友圈。等了十分钟，只有两个赞。一个是你妈。</p>
+    <p>这不是错觉。这件事正在发生。</p>
+    <p>朋友圈的互动断崖式下跌，不是因为你变无趣了，也不是因为朋友疏远了。是因为这场游戏的规则，悄悄变了。</p>
+
+    <div class="wechat-hr">✦</div>
+
+    <h2 class="cn">01 不是你变了，是朋友圈变了</h2>
+
+    <div class="img-block">
+      <img src="article-images/img1.jpg" alt="社交圈子示意" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=640&h=360&fit=crop'" />
+      <div class="img-desc">（图源网络，侵删）</div>
+    </div>
+
+    <p>你有没有注意到一个规律：加的人越多，点赞反而越少。</p>
+    <p>以前微信好友就是真正的朋友。后来它变成了工作台、社交场、人情交易所。你加了几百个人，真实想互动的不超过二十个。剩下的人看到你的朋友圈，就像路过地铁站的广告牌——看见了，但不会停下来。</p>
+    <p>这就是问题所在。</p>
+    <p>朋友圈从来不是一个公平的内容平台。你以为它是"发一张照片，朋友来看看"的私人空间，实际上它早就被平台、算法和人际关系的复杂度共同改写了。</p>
+
+    <div class="wechat-hr">✦</div>
+
+    <h2 class="cn">02 算法正在吃掉你的点赞</h2>
+
+    <div class="img-block">
+      <img src="article-images/img2.jpg" alt="算法推送示意" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=640&h=360&fit=crop'" />
+      <div class="img-desc">朋友圈在微信的商业版图里，正在被压缩</div>
+    </div>
+
+    <p>一个被忽视的真相：<strong>微信自己也在降权你的朋友圈。</strong></p>
+    <p>微信并不希望你发朋友圈。它希望你用视频号、刷公众号、买东西。朋友圈在它整个商业版图里，是一块正在被压缩的边缘地带。</p>
+    <p>所以当你的好友刷朋友圈时，你的帖子可能根本没出现在他的信息流里。算法决定谁看到谁看不到，点赞的第一步是"看到"，但现在连这一步都在被过滤。</p>
+    <p>你发了一条精心拍的照片，获得零赞。不是朋友不喜欢，是朋友根本没机会看到。</p>
+
+    <div class="wechat-hr">✦</div>
+
+    <h2 class="cn">03 点赞这件事，已经变味了</h2>
+
+    <div class="img-block">
+      <img src="article-images/img3.jpg" alt="点赞变味示意" onerror="this.src='https://images.unsplash.com/photo-1611746872915-35082a8d1dff?w=640&h=360&fit=crop'" />
+      <div class="img-desc">点赞的意义被稀释，行为自然减少</div>
+    </div>
+
+    <p>早年的点赞，是真正的情绪确认。"我看到了，我觉得不错。"简单、直接、没有负担。</p>
+    <p>现在点赞变了。</p>
+    <p>有些人把点赞当社交义务，点完即忘。有些人把点赞当人设维护——给谁点、不给谁点，里面有一套隐秘的人情账。有些人已经彻底不看朋友圈了，他们刷短视频，不需要点赞这个反馈机制。</p>
+    <p>当点赞的意义被稀释，点赞的行为自然减少。这不是哪一个人的问题，是整个社交规范在迁移。</p>
+
+    <div class="wechat-hr">✦</div>
+
+    <h2 class="cn">那怎么办？</h2>
+
+    <p>你有两个选择。</p>
+
+    <div class="highlight-box">
+      <p><strong>第一，接受它。</strong> 朋友圈本质上是一个"发给自己看"的存档空间，而不是演出舞台。降低对互动的预期，反而能让你发得更自在。那些真正想分享的瞬间，记录本身就是意义。</p>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>第二，换一套算法逻辑。</strong> 如果你真的在意互动，那就研究一下什么内容在朋友圈还有生命力：真实的生活片段、好玩的日常吐槽、有价值的信息分享——而不是精修九宫格和文艺感慨。真诚的内容永远比表演的内容更耐看，也更容易激活那些沉默的观众。</p>
+    </div>
+
+    <p>至于那些凌晨两点等着你更新的"两个赞"——其中一个是你妈，另一个可能是你自己用小号偷偷点的。</p>
+    <p>别难过，这已经很真实了。</p>
+
+    <div class="wechat-hr">✦</div>
+
+    <div class="article-end">
+      <p>朋友圈静悄悄，问题可能不在你这边。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function checkKey() {
+  const key = document.getElementById('keyInput').value;
+  if (key === 'xiaoliu525') {
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('article').style.display = 'block';
+  } else {
+    document.getElementById('error').textContent = '秘钥错误，请重试';
+  }
+}
+</script>
+</body>
+</html>
